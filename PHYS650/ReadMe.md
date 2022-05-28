@@ -6,8 +6,9 @@ Assignments:
 - Homework 1 (HW1)
     - Lidar Remote Sensing
     - Contents
-        - HW01_Ceilometer.ipynb
-        - Li
+        - HW01_Ceilometer.ipynb - Jupyter Notebook
+        - DingDong_et_a_2021.pdf - Ceilometer Rayleigh Calibration 
+        - 20200308_Catonsville-MD_CHM160112_000.nc - Ceilometer Data
     - Keywords: Rayleigh Calibration, System Constant, Vertical Resolution 
 - Homework 2 (HW2)
     - Met-Sonde Analysis
