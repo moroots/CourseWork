@@ -32,8 +32,7 @@ Assignments:
 - Final Project (Proj)
     - Analysis of A Mid-Atlanctic Ozone Episode
     - Contents
-        - Roots_PHYS650_Project.pdf
-        - Roots_PHYS650_202205.pdf
-        
+        - Roots_PHYS650_Project_pres.pdf
+        - Roots_PHYS650_Project_paper.pdf
     - Keywords: Ozone, Ozone-Lidar, Radar Wind Profiler, Met-Sonde, Ceilometer, Pandora, AERONET
 
