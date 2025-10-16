@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# ------------------------------------------------------------------------------- #
+# DESCRIPTION
+# ------------------------------------------------------------------------------- #
+# A quick script to grab files from the the 'exports' directory in Uranus machine
+
+# ------------------------------------------------------------------------------- #
+# INPUTS
+# ------------------------------------------------------------------------------- #
+
+# What is your username on Uranus
+usrnam=mroots
+
+# What folder on the files in?
+dir_get=exports
+
+# Where do you want the files save on your computer?
+savnam=/home/moroots/uranus_exports
+
+# Path in Uranus
+target=/mnt/Raid4TB/ART/home/$usrnam/$dir_get
+
+# ------------------------------------------------------------------------------- #
+# SCRIPT TO BE RUN
+# ------------------------------------------------------------------------------- #
+
+# Telling you what is happening
+echo Getting ALL files, and folders in $target
+
+# This line will recursively (all files and directories) in a specified directory
+scp -r -C -p $usrnam@uranus.laco.phys.umbc.edu:$target/* $savnam
+
+# - END - #
+
+
+

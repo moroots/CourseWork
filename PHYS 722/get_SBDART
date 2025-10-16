@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# A simple script for installing SBDARt from Github and getting it running
+# SBDART will use fortran so that is need and will also need some updates
+# and maybe some files moved around
+
+savespace=/home/moroots/Desktop
+# Install Fortran
+sudo apt-get install gfortran && echo -e "\n"
+
+# Install Git
+sudo apt install git && echo -e "\n"
+
+# Installing the MAKE command
+sudo apt install make && echo -e "\n"
+
+# Clone the Github repository for SBDART
+cd $savespace
+git clone https://github.com/paulricchiazzi/SBDART && echo -e "\n"
+
+# Copy the INPUT file to the main dir of SBDART change FC dir
+cp $savespace/SBDART/TestRuns/INPUT $savespace/SBDART
+cd $savespace/SBDART && sed -i 's/\/local//g' makefile && echo -e "\n"
+
+# make the environment
+cd $savespace/SBDART
+make && echo -e "\n"
+
+#Test Run
+echo -e "Doing a quick test run \n" 
+./sbdart >> Test_1 
+echo -e "\n This is the files ouput"
+
+

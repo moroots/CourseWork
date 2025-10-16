@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# I don't like doing all the steps for gettings things uploaded so I wrote this...
+
+read -p "Commit Message: "  commit_msg
+git add .
+git commit -m $commit_msg
+git push -u

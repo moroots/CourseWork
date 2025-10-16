@@ -1,0 +1,234 @@
+#!/bin/bash
+
+# ---------------------------------------------------------------------- #
+# DESCRIPTION -> I am writing this script to make this homework run easy #
+#                Hopefully it helps and isn/t just a pain. Please report #
+#                if you experience any bugs...                           #
+# ---------------------------------------------------------------------- #
+
+# ---------------------------------------------------------------------- #
+# Do not change these, unless you are debugging
+# ---------------------------------------------------------------------- #
+
+aod_modes=2 	# Aerosol Optical Depth (AOD) modes
+
+f_nam=namelist.ini	# Export as file -> namelist.ini
+
+data_loc=/mnt/Raid4TB/ART/home/mroots/UNL-VRTM_Roots/data	# Data Path
+
+# ---------------------------------------------------------------------- #
+# USER INPUTS                                                            #
+# ---------------------------------------------------------------------- #
+
+usrnam=mroots	# Enter your USERNAME
+
+savnam=HW_Vanderlei_LWav	# Create a OUTPUT FILE name
+
+sav_dir=/mnt/Raid4TB/ART/home/mroots/exports	# OUTPUT FILE directory
+
+f_loc=/mnt/Raid4TB/ART/home/$usrnam/UNL-VRTM_Roots/unl-vrtm-2.1/ # Path
+
+aod_fine_mode=0.5	# AOD Fine mode
+aod_coarse_mode=0.25	# AOD Coarse  mode
+
+r_rf_indx=1.55 		# Real part of Refractive Index
+i_rf_indx=-0.02 	# Imaginart part of Refractive Index
+
+# Specify in nm or 1/cm #
+wav_num=F		# F -> wavelength (nm) | T -> wavenumber (1/cm)
+spec_range1=250 	# Spectral Range Start
+spec_range2=300 	# Spectral Range Stop
+spec_res=1		# Spectral Resolution
+
+sza=53			# Solar Zenith Angle (SZA)
+saa=90			# Solar Azimuth Angle (SAA)
+
+surf_a=0		# Surface Albedo
+
+atmotype=2 		# Type of Atmosphere
+			   	# Presets #
+				# 1 ->	Tropical
+				# 2 ->	Mid-Latitute Summer
+				# 3 ->	mid-Latitude Winter
+				# 4 ->	High-Latitude Summer
+				# 5 ->	High-Latitude Winter
+				# 6 ->	US Standard (1976)
+				# -1 ->	User Specified in atmos.dat file
+				# -2 ->	User Specified in atmos.nc file
+
+lay_num=3		# Numer of Layers?
+				# Presets #
+				# -1 ->	33 Layers
+				# -2 ->	26 Layers
+
+# ---------------------------------------------------------------------------- #
+# The following will be input for namelist.ini -> the input file of UNL-VRTM
+# ---------------------------------------------------------------------------- #
+
+echo "UNL-VRTM v2.1 namelist file 12/09/2019 xxu
+************************+******************************************************
+%%% CONTROL MENU %%%    :
+Frequency as input?     : $wav_num
+Spectra set (nm or 1/cm): $spec_range1 $spec_range2
+  - interval(nm or 1/cm): $spec_res
+  - FWHM    (nm or 1/cm): 2
+Atmos. type[1-6,-1 or-2]: $atmotype
+  - number of layers    : $lay_num
+  - surf altitude (m)   : -1
+  - surf pressure (hPa) : -1
+Run    directory        : $sav_dir
+Data   directory        : $data_loc
+Output directory        : $sav_dir
+------------------------+------------------------------------------------------
+%%% GEOMETRY MENU %%%   :
+Solar zenith angle      : $sza
+Solar azimuthal angle   : $saa
+Solar position by time? : F
+  - yyyymmdd  hhmmss    : 20120101 103000
+  - latitude  longitude : 10 -20
+View zenith angle(s)    : 0
+View azimuthal angle(s) : 0
+------------------------+------------------------------------------------------
+%%% RTM MENU %%%        :
+Turn on RTM (VLIDORT)?  : T
+# of Stokes components  : 1
+# of dsicrete streams   : 15
+# of P Legendre terms   : 180
+Receptor level(s)       : 0
+Receptor direction      : -1
+Do pseudo-spherical?    : T
+SS correction scenario  : 1
+Do Solar source         : T
+  - flux factor         : 1.0
+Do atmos emission?      : F
+Do surface emission?    : F
+  - surface T (K)       : 300
+------------------------+------------------------------------------------------
+%%% JACOBIAN MENU %%%   :
+Turn on Profile Jacob.? : F
+Turn on Column Jacob.?  : T
+  - wrt Gas?            : F
+  - wrt AOD?            : F
+  - wrt SSA?            : F
+  - wrt aerosol volume? : F
+  - wrt mode fraction?  : F
+  - wrt refractivity?   : T
+  - wrt shape factor?   : F
+  - wrt size dist?      : T
+  - wrt aerosol profile?: F
+Non-varying volume?     : T
+Non-varying AOT?        : F
+Turn on surface Jacob.? : T
+  - wrt BRDF factor?    : T
+  - wrt BRDF parameter? : F
+Do FD verication?       : F
+------------------------+------------------------------------------------------
+%%% SURFACE MENU %%%    :
+Do Lambertian surface?  : T
+  - surface reflecetance: $surf_a
+Do BRDF/BPDF surface?   : F
+  - # of kernels        : 2
+  - kernel entries      : Name      Index  Factor  #PARS  PAR(1)  PAR(2)  PAR(3)
+           ==> kernel#1 : Lambertian  1    0.02    0      0.0     0.0     0.0
+           ==> kernel#2 : Cox-Munk    9    1.0     2      0.0286  1.7796  0.0
+------------------------+------------------------------------------------------
+%%% AEROSOL MENU %%%    :
+Turn on aerosol?        : T
+Number of aerosol modes : $aod_modes
+Columnar loading(s)     : $aod_fine_mode        $aod_coarse_mode
+  - is AOD?             : T
+  - is Vol (um3/um2)?   : F
+Mie/T-Mat/User (1/2/-1) : 1          1
+Mode #1 Properties      : ....................Mode#1...................
+  - refractive index    : $r_rf_indx      $i_rf_indx
+  - shape factor        : -1         1.4
+  - monodisperse?       : F          1.0
+  - size range [um]     : 0.01       10
+  - size distribution   : Index      PAR(1)    PAR(2)    PAR(3)
+            ==> Entries : 4          0.20      1.6       0
+  - vertical range[km]  : 0          5
+  - vertical profile    : Index      PAR(1)    PAR(2)
+            ==> Entries : 1          8.0       2.0
+Mode #2 Properties      : ....................Mode#2...................
+  - refractive index    : $r_rf_indx     $i_rf_indx
+  - shape factor        : -1         1.0
+  - monodisperse?       : F          1.0
+  - size range [um]     : 0.05       15
+  - size distribution   : Index      PAR(1)    PAR(2)    PAR(3)
+            ==> Entries : 5          1.90      0.41      0
+  - vertical range[km]  : 0          15.0
+  - vertical profile    : Index      PAR(1)    PAR(2)
+            ==> Entries : 3          2.0       2.0
+Reference aerosol mode  : ..................Mode#REF...................
+  - reference AOD?      : F
+  - wavelength [nm]     : 550
+  - refractive index    : 1.46       0.01
+  - monodisperse?       : F          1.0
+  - size range [um]     : 0.01       10
+  - size distribution   : Index      PAR(1)    PAR(2)    PAR(3)
+            ==> Entries : 4          0.20      1.6       0
+------------------------+------------------------------------------------------
+%%% TRACE-GAS MENU %%%  :
+Turn on trace gases?    : T
+Use pre-calculated data?: F
+  - data filename       : xxxx/xxxx.unlvrtm.nc
+Include HITRAN lines?   : T
+Include SAO UV-Vis xsec?: T
+Include continuum?      : T
+Num. of trace gases     : 22
+Trace gas Entries   ==> : TR#   Name    M-Weight   Include?  Scaling
+Trace gas #1            :   1   H2O     18.015       T       1.0
+Trace gas #2            :   2   CO2     44.010       T       1.0
+Trace gas #3            :   3   O3      47.998       T       1.0
+Trace gas #4            :   4   N2O     44.010       T       1.0
+Trace gas #5            :   5   CO      28.011       T       1.0
+Trace gas #6            :   6   CH4     16.043       T       1.0
+Trace gas #7            :   7   O2      31.999       T       1.0
+Trace gas #8            :   8   NO      30.010       T       1.0
+Trace gas #9            :   9   SO2     64.060       T       1.0
+Trace gas #10           :  10   NO2     46.010       T       1.0
+Trace gas #11           :  11   NH3     17.030       F       1.0
+Trace gas #12           :  12   HNO3    63.010       F       1.0
+Trace gas #13           :  13   OH      17.000       F       1.0
+Trace gas #14           :  14   HF      20.010       F       1.0
+Trace gas #15           :  15   HCL     36.460       F       1.0
+Trace gas #16           :  16   HBR     80.920       F       1.0
+Trace gas #17           :  17   HI      127.91       F       1.0
+Trace gas #18           :  18   CLO     51.450       F       1.0
+Trace gas #19           :  19   OCS     60.080       F       1.0
+Trace gas #20           :  20   H2CO    30.030       F       1.0
+Trace gas #21           :  21   HOCL    52.460       F       1.0
+Trace gas #22           :  22   N2      28.014       F       1.0
+------------------------+------------------------------------------------------
+%%% RAYLEIGH MENU %%%   :
+Turn on Rayleigh?       : T
+Turn on anisotropy?     : T
+------------------------+------------------------------------------------------
+%%% DIAGNOSTIC MENU %%% :
+Turn on DIAGNOSTIC?     : T
+Output NC file prefix   : $savnam
+DIAG01: Model inputs    : T
+DIAG02: Atmos profiles  : T
+DIAG03: Linearized Mie  : T
+DIAG04: Optic profiles  : T
+DIAG05: Surface property: T
+DIAG06: VLIDORT IOP     : F
+DIAG07: Radiances       : T
+DIAG08: Jacobians       : F
+------------------------+------------------------------------------------------
+%%% DEBUG MENU %%%      :
+Write VLIDORT inputs?   : T
+Turn on screen print?   : T
+  - print aerosol calc? : T
+  - print Mie calc?     : T
+  - print Rayleigh calc?: T
+  - print gas calc?     : T
+  - print surface calc? : T
+  - print RTM calc?     : T
+------------------------+------------------------------------------------------
+END OF FILE             :
+************************+******************************************************" | tee $f_loc/run/$f_nam $sav_dir/$f_nam
+
+# Now that the input file (namelist.ini) is set we can run the code
+cd $f_loc && ./build && cd $f_loc/run && ./run.sh
+
